@@ -1,3 +1,5 @@
+package priorityqueue;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -80,8 +82,12 @@ public class PriorityQueueOnBinaryHeap<T> implements PriorityQueue<T> {
   public T pop() {
     T value = top();
     if (value != null) {
-      list.set(0, list.remove(list.size() - 1));
-      heapifyDown(0);
+      if (list.size() == 1) {
+        list.remove(0);
+      } else {
+        list.set(0, list.remove(list.size() - 1));
+        heapifyDown(0);
+      }
     }
     return value;
   }

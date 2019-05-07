@@ -1,3 +1,5 @@
+package priorityqueue;
+
 public interface PriorityQueue<T> {
   void insert(Pair<T> pair);
 
@@ -33,7 +35,7 @@ public interface PriorityQueue<T> {
       this.priority = priority;
     }
 
-    Pair(T value, Integer priority) {
+    public Pair(T value, Integer priority) {
       this.value = value;
       this.priority = priority;
     }
