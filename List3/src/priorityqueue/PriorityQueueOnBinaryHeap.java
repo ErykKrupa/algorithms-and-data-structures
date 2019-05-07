@@ -53,6 +53,9 @@ public class PriorityQueueOnBinaryHeap<T> implements PriorityQueue<T> {
 
   @Override
   public void insert(Pair<T> pair) {
+    if (pair.getPriority() < 0) {
+      throw new IllegalArgumentException();
+    }
     list.add(pair);
     int childIndex = list.size() - 1;
     int parentIndex = (childIndex - 1) / 2;
