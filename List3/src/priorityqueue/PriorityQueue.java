@@ -19,7 +19,7 @@ public interface PriorityQueue<T> {
     private T value;
     private Integer priority;
 
-    public T getValue() {
+    T getValue() {
       return value;
     }
 
@@ -27,15 +27,15 @@ public interface PriorityQueue<T> {
       this.value = value;
     }
 
-    public Integer getPriority() {
+    Integer getPriority() {
       return priority;
     }
 
-    public void setPriority(Integer priority) {
+    void setPriority(Integer priority) {
       this.priority = priority;
     }
 
-    public Pair(T value, Integer priority) {
+    Pair(T value, Integer priority) {
       this.value = value;
       this.priority = priority;
     }

@@ -3,7 +3,7 @@ package priorityqueue;
 import java.util.Scanner;
 
 public class Main {
-  private static int operationsCount = 0;
+  private static int operationsCount = 1;
 
   private static boolean checkWithParameters(String[] operation) {
     if (operation.length == 3) {
@@ -43,7 +43,7 @@ public class Main {
 
     PriorityQueue<Integer> queue = new PriorityQueueOnBinaryHeap<>();
     System.out.println("Put " + operationsQuantity + " operations:");
-    while (++operationsCount <= operationsQuantity) {
+    for (; operationsCount <= operationsQuantity; operationsCount++) {
       String[] operation = scanner.nextLine().split(" ");
       if (operation.length == 0) {
         onceAgain();
