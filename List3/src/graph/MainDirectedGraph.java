@@ -2,7 +2,7 @@ package graph;
 
 import java.util.Scanner;
 
-public class Main {
+public class MainDirectedGraph {
   private static Scanner scanner = new Scanner(System.in);
 
   private static int inputPositiveInteger() {
@@ -25,7 +25,7 @@ public class Main {
     System.out.print("Edges quantity: ");
     int edgesQuantity = inputPositiveInteger();
 
-    Graph<Integer> graph = new Graph<>();
+    DirectedGraph<Integer> graph = new DirectedGraph<>();
     for (int i = 1; i <= nodesQuantity; i++) {
       graph.addNode(i);
     }
@@ -48,7 +48,7 @@ public class Main {
       i--;
       System.err.print("Once again: ");
     }
-    System.out.println("Source node: ");
+    System.out.print("Source node: ");
     graph.dijkstra(inputPositiveInteger());
   }
 }
