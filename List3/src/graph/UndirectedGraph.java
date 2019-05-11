@@ -5,10 +5,10 @@ import priorityqueue.PriorityQueueOnBinaryHeap;
 
 import java.util.*;
 
-class UndirectedGraph<T> extends Graph<T> {
+public class UndirectedGraph<T> extends Graph<T> {
   private Map<T, T> sets;
 
-  boolean addEdge(T sourceNode, T sinkNode, Integer weight) {
+  public boolean addEdge(T sourceNode, T sinkNode, Double weight) {
     if (graph.containsKey(sourceNode)
         && graph.containsKey(sinkNode)
         && weight >= 0
@@ -22,7 +22,7 @@ class UndirectedGraph<T> extends Graph<T> {
     }
   }
 
-  class Pair {
+  private class Pair {
     private T firstNode;
     private T secondNode;
 
@@ -79,18 +79,15 @@ class UndirectedGraph<T> extends Graph<T> {
     }
   }
 
-  void kruskal() {
-    if (graph.size() == 0) {
-      return;
-    }
+  public void kruskal() {
     sets = new HashMap<>();
-    for (Map.Entry<T, Map<T, Integer>> node : graph.entrySet()) {
-      makeSet(node.getKey());
+    for (Map.Entry<T, Map<T, Double>> nodeWithEdges : graph.entrySet()) {
+      makeSet(nodeWithEdges.getKey());
     }
     PriorityQueue<Pair> queue = new PriorityQueueOnBinaryHeap<>();
-    for (Map.Entry<T, Map<T, Integer>> node : graph.entrySet()) {
-      for (Map.Entry<T, Integer> edge : node.getValue().entrySet()) {
-        queue.insert(new Pair(node.getKey(), edge.getKey()), edge.getValue());
+    for (Map.Entry<T, Map<T, Double>> nodeWithEdges : graph.entrySet()) {
+      for (Map.Entry<T, Double> edge : nodeWithEdges.getValue().entrySet()) {
+        queue.insert(new Pair(nodeWithEdges.getKey(), edge.getKey()), edge.getValue());
       }
     }
     while (!queue.empty()) {
@@ -100,8 +97,9 @@ class UndirectedGraph<T> extends Graph<T> {
     print();
   }
 
-  void prim() {
+  public void prim() {
     if (graph.size() == 0) {
+      print();
       return;
     }
     sets = new HashMap<>();
@@ -109,7 +107,7 @@ class UndirectedGraph<T> extends Graph<T> {
     T startNode = (T) graph.keySet().toArray()[0];
     makeSet(startNode);
     PriorityQueue<Pair> queue = new PriorityQueueOnBinaryHeap<>();
-    for (Map.Entry<T, Integer> edge : graph.get(startNode).entrySet()) {
+    for (Map.Entry<T, Double> edge : graph.get(startNode).entrySet()) {
       T nextNode = edge.getKey();
       if (nextNode != startNode) {
         queue.insert(new Pair(nextNode, startNode), edge.getValue());
@@ -121,7 +119,7 @@ class UndirectedGraph<T> extends Graph<T> {
         continue;
       }
       sets.put(pair.firstNode, pair.secondNode);
-      for (Map.Entry<T, Integer> edge : graph.get(pair.firstNode).entrySet()) {
+      for (Map.Entry<T, Double> edge : graph.get(pair.firstNode).entrySet()) {
         T key = edge.getKey();
         if (!sets.containsKey(key)) {
           queue.insert(new Pair(key, pair.firstNode), edge.getValue());
@@ -133,14 +131,14 @@ class UndirectedGraph<T> extends Graph<T> {
 
   private void print() {
     System.out.println("Spanning tree: ");
-    Integer weightSum = 0;
-    for (Map.Entry<T, Map<T, Integer>> node : graph.entrySet()) {
-      T firstNode = node.getKey();
+    Double weightSum = 0.0;
+    for (Map.Entry<T, Map<T, Double>> nodeWithEdges : graph.entrySet()) {
+      T firstNode = nodeWithEdges.getKey();
       T secondNode = sets.get(firstNode); // node.getValue();
       if (secondNode == null) {
         continue;
       }
-      Integer weight = node.getValue().get(secondNode);
+      Double weight = nodeWithEdges.getValue().get(secondNode);
       weightSum += weight;
       System.out.println(firstNode + " <---(" + weight + ")---> " + secondNode);
     }

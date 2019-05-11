@@ -1,15 +1,16 @@
-package priorityqueue;
+package main;
 
-import java.util.Scanner;
+import priorityqueue.PriorityQueue;
+import priorityqueue.PriorityQueueOnBinaryHeap;
 
-public class Main {
+public class MainPriorityQueue extends Main {
   private static int operationsCount = 1;
 
   private static boolean checkWithParameters(String[] operation) {
     if (operation.length == 3) {
       try {
         Integer.parseInt(operation[1]);
-        Integer.parseInt(operation[2]);
+        Double.parseDouble(operation[2]);
         return true;
       } catch (NumberFormatException ignored) {
       }
@@ -27,20 +28,9 @@ public class Main {
   }
 
   public static void main(String[] args) {
-    Scanner scanner = new Scanner(System.in);
-    System.out.print("Put amount of operations: ");
-    int operationsQuantity;
-    while (true) {
-      try {
-        operationsQuantity = Integer.parseInt(scanner.nextLine());
-        if (operationsQuantity > 0) {
-          break;
-        }
-      } catch (NumberFormatException ignored) {
-      }
-      System.err.print("Once again: ");
-    }
 
+    System.out.print("Put amount of operations: ");
+    int operationsQuantity = inputPositiveInteger();
     PriorityQueue<Integer> queue = new PriorityQueueOnBinaryHeap<>();
     System.out.println("Put " + operationsQuantity + " operations:");
     for (; operationsCount <= operationsQuantity; operationsCount++) {
@@ -53,13 +43,13 @@ public class Main {
         case "insert":
           if (checkWithParameters(operation)) {
             try {
-              queue.insert(Integer.parseInt(operation[1]), Integer.parseInt(operation[2]));
+              queue.insert(Integer.parseInt(operation[1]), Double.parseDouble(operation[2]));
               System.out.println(
                   operationsCount
                       + ". Insert: ("
                       + Integer.parseInt(operation[1])
                       + ", "
-                      + Integer.parseInt(operation[2])
+                      + Double.parseDouble(operation[2])
                       + ")");
             } catch (IllegalArgumentException ex) {
               onceAgain();
@@ -91,13 +81,13 @@ public class Main {
           break;
         case "priority":
           if (checkWithParameters(operation)) {
-            queue.priority(Integer.parseInt(operation[1]), Integer.parseInt(operation[2]));
+            queue.priority(Integer.parseInt(operation[1]), Double.parseDouble(operation[2]));
             System.out.println(
                 operationsCount
                     + ". Priority: ("
                     + Integer.parseInt(operation[1])
                     + ", "
-                    + Integer.parseInt(operation[2])
+                    + Double.parseDouble(operation[2])
                     + ")");
           } else {
             onceAgain();

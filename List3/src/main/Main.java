@@ -1,11 +1,13 @@
-package graph;
+package main;
+
+import graph.Graph;
 
 import java.util.Scanner;
 
-public class MainDirectedGraph {
-  private static Scanner scanner = new Scanner(System.in);
+abstract class Main {
+  static Scanner scanner = new Scanner(System.in);
 
-  private static int inputPositiveInteger() {
+  static int inputPositiveInteger() {
     int positive;
     while (true) {
       try {
@@ -19,13 +21,12 @@ public class MainDirectedGraph {
     }
   }
 
-  public static void main(String[] args) {
+  static void inputGraph(Graph<Integer> graph) {
     System.out.print("Nodes quantity: ");
     int nodesQuantity = inputPositiveInteger();
     System.out.print("Edges quantity: ");
     int edgesQuantity = inputPositiveInteger();
 
-    DirectedGraph<Integer> graph = new DirectedGraph<>();
     for (int i = 1; i <= nodesQuantity; i++) {
       graph.addNode(i);
     }
@@ -37,7 +38,7 @@ public class MainDirectedGraph {
         if (edge.length == 3) {
           Integer sourceNode = Integer.parseInt(edge[0]);
           Integer sinkNode = Integer.parseInt(edge[1]);
-          Integer weightNode = Integer.parseInt(edge[2]);
+          Double weightNode = Double.parseDouble(edge[2]);
           if (graph.addEdge(sourceNode, sinkNode, weightNode)) {
             System.out.println(i + ". " + sourceNode + " ---(" + weightNode + ")---> " + sinkNode);
             continue;
@@ -48,7 +49,5 @@ public class MainDirectedGraph {
       i--;
       System.err.print("Once again: ");
     }
-    System.out.print("Source node: ");
-    graph.dijkstra(inputPositiveInteger());
   }
 }

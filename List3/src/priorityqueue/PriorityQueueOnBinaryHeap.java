@@ -6,13 +6,13 @@ import java.util.List;
 
 public class PriorityQueueOnBinaryHeap<T> implements PriorityQueue<T> {
   private List<Pair<T>> list = new ArrayList<>();
-  private Comparator<Integer> comparator;
+  private Comparator<Double> comparator;
 
   public PriorityQueueOnBinaryHeap() {
-    comparator = Comparator.comparingInt(a -> a);
+    comparator = Comparator.comparingDouble(a -> a);
   }
 
-  public PriorityQueueOnBinaryHeap(Comparator<Integer> comparator) {
+  public PriorityQueueOnBinaryHeap(Comparator<Double> comparator) {
     this.comparator = comparator;
   }
 
@@ -67,7 +67,7 @@ public class PriorityQueueOnBinaryHeap<T> implements PriorityQueue<T> {
   }
 
   @Override
-  public void insert(T value, Integer priority) {
+  public void insert(T value, Double priority) {
     insert(new Pair<>(value, priority));
   }
 
@@ -96,7 +96,7 @@ public class PriorityQueueOnBinaryHeap<T> implements PriorityQueue<T> {
   }
 
   @Override
-  public void priority(T value, Integer priority) {
+  public void priority(T value, Double priority) {
     for (int i = 0; i < list.size(); i++) {
       if (list.get(i).getValue() == value
           && comparator.compare(priority, list.get(i).getPriority()) < 0) {

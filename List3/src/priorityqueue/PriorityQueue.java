@@ -3,7 +3,7 @@ package priorityqueue;
 public interface PriorityQueue<T> {
   void insert(Pair<T> pair);
 
-  void insert(T value, Integer priority);
+  void insert(T value, Double priority);
 
   boolean empty();
 
@@ -11,13 +11,13 @@ public interface PriorityQueue<T> {
 
   T pop();
 
-  void priority(T value, Integer priority);
+  void priority(T value, Double priority);
 
   void print();
 
   class Pair<T> {
     private T value;
-    private Integer priority;
+    private Double priority;
 
     T getValue() {
       return value;
@@ -27,15 +27,15 @@ public interface PriorityQueue<T> {
       this.value = value;
     }
 
-    Integer getPriority() {
+    Double getPriority() {
       return priority;
     }
 
-    void setPriority(Integer priority) {
+    void setPriority(Double priority) {
       this.priority = priority;
     }
 
-    Pair(T value, Integer priority) {
+    Pair(T value, Double priority) {
       this.value = value;
       this.priority = priority;
     }
