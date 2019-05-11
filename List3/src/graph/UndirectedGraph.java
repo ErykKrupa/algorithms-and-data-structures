@@ -22,6 +22,24 @@ class UndirectedGraph<T> extends Graph<T> {
     }
   }
 
+  class Pair {
+    private T firstNode;
+    private T secondNode;
+
+    private T getFirstNode() {
+      return firstNode;
+    }
+
+    private T getSecondNode() {
+      return secondNode;
+    }
+
+    private Pair(T firstNode, T secondNode) {
+      this.firstNode = firstNode;
+      this.secondNode = secondNode;
+    }
+  }
+
   private void makeSet(T node) {
     sets.put(node, null);
   }
@@ -60,25 +78,11 @@ class UndirectedGraph<T> extends Graph<T> {
       sets.put(firstNode, secondNode);
     }
   }
-  class Pair {
-    private T firstNode;
-    private T secondNode;
-
-    private T getFirstNode() {
-      return firstNode;
-    }
-
-    private T getSecondNode() {
-      return secondNode;
-    }
-
-    private Pair(T firstNode, T secondNode) {
-      this.firstNode = firstNode;
-      this.secondNode = secondNode;
-    }
-  }
 
   void kruskal() {
+    if (graph.size() == 0) {
+      return;
+    }
     sets = new HashMap<>();
     for (Map.Entry<T, Map<T, Integer>> node : graph.entrySet()) {
       makeSet(node.getKey());
@@ -92,6 +96,37 @@ class UndirectedGraph<T> extends Graph<T> {
     while (!queue.empty()) {
       Pair pair = queue.pop();
       union(pair.getFirstNode(), pair.getSecondNode());
+    }
+    print();
+  }
+
+  void prim() {
+    if (graph.size() == 0) {
+      return;
+    }
+    sets = new HashMap<>();
+    @SuppressWarnings("unchecked")
+    T startNode = (T) graph.keySet().toArray()[0];
+    makeSet(startNode);
+    PriorityQueue<Pair> queue = new PriorityQueueOnBinaryHeap<>();
+    for (Map.Entry<T, Integer> edge : graph.get(startNode).entrySet()) {
+      T nextNode = edge.getKey();
+      if (nextNode != startNode) {
+        queue.insert(new Pair(nextNode, startNode), edge.getValue());
+      }
+    }
+    while (sets.size() < graph.size()) {
+      Pair pair = queue.pop();
+      if (sets.containsKey(pair.firstNode)) {
+        continue;
+      }
+      sets.put(pair.firstNode, pair.secondNode);
+      for (Map.Entry<T, Integer> edge : graph.get(pair.firstNode).entrySet()) {
+        T key = edge.getKey();
+        if (!sets.containsKey(key)) {
+          queue.insert(new Pair(key, pair.firstNode), edge.getValue());
+        }
+      }
     }
     print();
   }
@@ -111,6 +146,4 @@ class UndirectedGraph<T> extends Graph<T> {
     }
     System.out.println("Weight sum: " + weightSum);
   }
-
-
 }

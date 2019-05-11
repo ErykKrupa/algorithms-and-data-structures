@@ -57,10 +57,10 @@ public class MainUndirectedGraph {
       i--;
       System.err.print("Once again: ");
     }
-//    if (algorithm.equals("-k")) {
+    if (algorithm.equals("-k")) {
       graph.kruskal();
-//    } else {
+    } else {
       graph.prim();
-//    }
+    }
   }
 }
