@@ -29,7 +29,7 @@ public class MainDirectedGraph extends Main {
       graph.dijkstra(inputPositiveInteger());
     }
     if (kosaraju) {
-//      TODO Kosaraju's algorithm
+      graph.kosaraju();
     }
   }
 }
