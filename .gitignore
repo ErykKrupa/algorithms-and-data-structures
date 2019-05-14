@@ -2,4 +2,5 @@
 *.iml
 *.csv
 *.xlsx
+*.txt
 out/

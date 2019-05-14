@@ -112,13 +112,11 @@ public abstract class Tree {
   public void inorder() {
     inorderCount++;
     Node node = findMin(root);
-    if (node == null) {
-      System.out.println();
-    }
     while (node != null) {
       System.out.print(node.key + " ");
       node = findSuccessor(node);
     }
+    System.out.println();
   }
 
   abstract Node findMin(Node node);

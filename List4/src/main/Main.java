@@ -41,7 +41,7 @@ public class Main {
 
     BinarySearchTree tree = null;
     if (args[1].equals("bst")) {
-      tree = new BinarySearchTree(String::compareTo);
+      tree = new BinarySearchTree(String::compareToIgnoreCase);
     } else if (args[1].equals("rbt")) {
       //      tree = new RedBlackTree(String::compareTo);
     } else {
@@ -86,9 +86,8 @@ public class Main {
         onceAgain();
       }
     }
-    System.err.println("Time: " + (System.currentTimeMillis() - startTime) + "[ms]");
-    System.err.println("Operations counts:");
-    System.err.println("Insert: " + tree.getInorderCount());
+    System.err.println("Time: " + ((System.currentTimeMillis() - startTime) / 1000) + "[s]");
+    System.err.println("Insert: " + tree.getInsertCount());
     System.err.println("Delete: " + tree.getDeleteCount());
     System.err.println("Search: " + tree.getSearchCount());
     System.err.println("Empty: " + tree.getEmptyCount());
@@ -96,7 +95,5 @@ public class Main {
     System.err.println("Inorder: " + tree.getInorderCount());
     System.err.println("Maximal size: " + tree.getElementsCountMax());
     System.err.println("Final size: " + tree.getElementsCount());
-    System.err.println();
-    System.err.println();
   }
 }
