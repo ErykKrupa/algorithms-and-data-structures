@@ -24,10 +24,11 @@ public class Main {
 
   private static void onceAgain() {
     System.err.println("Once again: ");
-    operations--;
+    operations++;
   }
 
   public static void main(String[] args) {
+    long startTime = System.currentTimeMillis();
     if (args.length != 2) {
       System.err.println("Two argument required");
       return;
@@ -85,5 +86,17 @@ public class Main {
         onceAgain();
       }
     }
+    System.err.println("Time: " + (System.currentTimeMillis() - startTime) + "[ms]");
+    System.err.println("Operations counts:");
+    System.err.println("Insert: " + tree.getInorderCount());
+    System.err.println("Delete: " + tree.getDeleteCount());
+    System.err.println("Search: " + tree.getSearchCount());
+    System.err.println("Empty: " + tree.getEmptyCount());
+    System.err.println("Load: " + tree.getLoadCount());
+    System.err.println("Inorder: " + tree.getInorderCount());
+    System.err.println("Maximal size: " + tree.getElementsCountMax());
+    System.err.println("Final size: " + tree.getElementsCount());
+    System.err.println();
+    System.err.println();
   }
 }
