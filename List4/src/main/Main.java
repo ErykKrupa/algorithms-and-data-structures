@@ -1,6 +1,8 @@
 package main;
 
 import tree.BinarySearchTree;
+import tree.RedBlackTree;
+import tree.Tree;
 
 import java.util.Scanner;
 
@@ -39,13 +41,13 @@ public class Main {
       return;
     }
 
-    BinarySearchTree tree = null;
+    Tree tree = null;
     if (args[1].equals("bst")) {
       tree = new BinarySearchTree(String::compareToIgnoreCase);
     } else if (args[1].equals("rbt")) {
-      //      tree = new RedBlackTree(String::compareTo);
+      tree = new RedBlackTree(String::compareToIgnoreCase);
     } else {
-      //      tree = new SplayTree(String::compareTo);
+      //      tree = new SplayTree(String::compareToIgnoreCase);
     }
 
     System.out.print("Amount of operations: ");
