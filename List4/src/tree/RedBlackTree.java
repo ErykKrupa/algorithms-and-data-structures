@@ -50,7 +50,7 @@ public class RedBlackTree extends Tree {
 
   @Override
   public void insert(String element) {
-    element = prepareInsert(element);
+    element = prepareToInsert(element);
     if (element.equals("")) {
       return;
     }
@@ -117,7 +117,7 @@ public class RedBlackTree extends Tree {
 
   @Override
   public void delete(String element) {
-    Node newNode = prepareDelete(element);
+    Node newNode = prepareToDelete(element);
     if (newNode == getSentinel()) {
       return;
     }

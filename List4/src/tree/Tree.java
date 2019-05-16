@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Comparator;
+import java.util.*;
 
 public abstract class Tree {
   Node root;
@@ -80,7 +80,17 @@ public abstract class Tree {
 
   public abstract void insert(String element);
 
-  String prepareInsert(String element) {
+  void insert(Node node, Node parent) {
+    if (parent == null) {
+      root = node;
+    } else if (c.compare(node.key, parent.key) < 0) {
+      parent.left = node;
+    } else {
+      parent.right = node;
+    }
+  }
+
+  String prepareToInsert(String element) {
     insertCount++;
     if (element == null) {
       throw new NullPointerException("Element cannot be null");
@@ -97,7 +107,7 @@ public abstract class Tree {
 
   public abstract void delete(String element);
 
-  Node prepareDelete(String element) {
+  Node prepareToDelete(String element) {
     deleteCount++;
     if (element == null) {
       throw new NullPointerException("Element cannot be null");
@@ -113,7 +123,7 @@ public abstract class Tree {
     return find(element) != getSentinel();
   }
 
-  private Node find(String element) {
+  Node find(String element) {
     Node node = root;
     while (node != getSentinel()) {
       if (c.compare(node.key, element) == 0) {
@@ -133,13 +143,19 @@ public abstract class Tree {
     loadCount++;
     try {
       BufferedReader reader = new BufferedReader(new FileReader(file));
+      //      List<String> list = new LinkedList<>();
       String line = reader.readLine();
       while (line != null) {
-        for (String word : line.split("[ \t,.;:?!\\-()\"]")) {
+        //        list.addAll(Arrays.asList(line.split("[ \t,.;:?!\\-()\"]")));
+        for (String word : line.split("\\W+")) { // "[ \t,.;:?!\\-()\"]")) {
           insert(word);
         }
         line = reader.readLine();
       }
+      //      Collections.shuffle(list);
+      //      long startTime = System.currentTimeMillis();
+
+      //      System.out.println(System.currentTimeMillis() - startTime + "[ms]");
     } catch (FileNotFoundException ex) {
       System.err.println("File not found");
     } catch (IOException ex) {
@@ -150,11 +166,13 @@ public abstract class Tree {
   public void inorder() {
     inorderCount++;
     Node node = findMin(root);
+    int i = 0;
     while (node != getSentinel()) {
+      i++;
       System.out.print(node.key + " ");
       node = findSuccessor(node);
     }
-    System.out.println();
+    System.out.println(i);
   }
 
   private Node findMin(Node node) {

@@ -2,6 +2,7 @@ package main;
 
 import tree.BinarySearchTree;
 import tree.RedBlackTree;
+import tree.SplayTree;
 import tree.Tree;
 
 import java.util.Scanner;
@@ -41,13 +42,13 @@ public class Main {
       return;
     }
 
-    Tree tree = null;
+    Tree tree;
     if (args[1].equals("bst")) {
       tree = new BinarySearchTree(String::compareToIgnoreCase);
     } else if (args[1].equals("rbt")) {
       tree = new RedBlackTree(String::compareToIgnoreCase);
     } else {
-      //      tree = new SplayTree(String::compareToIgnoreCase);
+      tree = new SplayTree(String::compareToIgnoreCase);
     }
 
     System.out.print("Amount of operations: ");
@@ -95,7 +96,7 @@ public class Main {
     System.err.println("Empty: " + tree.getEmptyCount());
     System.err.println("Load: " + tree.getLoadCount());
     System.err.println("Inorder: " + tree.getInorderCount());
-    System.err.println("Maximal size: " + tree.getElementsCountMax());
     System.err.println("Final size: " + tree.getElementsCount());
+    System.err.println("Maximal size: " + tree.getElementsCountMax());
   }
 }

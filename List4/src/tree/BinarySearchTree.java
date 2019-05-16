@@ -16,7 +16,7 @@ public class BinarySearchTree extends Tree {
 
   @Override
   public void insert(String element) {
-    element = prepareInsert(element);
+    element = prepareToInsert(element);
     if (element.equals("")) {
       return;
     }
@@ -27,20 +27,14 @@ public class BinarySearchTree extends Tree {
       node = ((c.compare(element, node.key) < 0) ? node.left : node.right);
     }
     node = new Node(element, parent);
-    if (parent == null) {
-      root = node;
-    } else if (c.compare(element, parent.key) < 0) {
-      parent.left = node;
-    } else {
-      parent.right = node;
-    }
+    insert(node, parent);
     elementsCount++;
     elementsCountMax = Math.max(elementsCountMax, elementsCount);
   }
 
   @Override
   public void delete(String element) {
-    Node node = prepareDelete(element);
+    Node node = prepareToDelete(element);
     if (node == null) {
       return;
     }
