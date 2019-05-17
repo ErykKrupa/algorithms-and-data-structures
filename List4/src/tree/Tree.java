@@ -54,6 +54,14 @@ public abstract class Tree {
     return elementsCountMax;
   }
 
+  public long getComparisonCount() {
+    return comparisonCount;
+  }
+
+  public long getModificationCount() {
+    return modificationCount;
+  }
+
   enum Color {
     RED,
     BLACK
@@ -66,6 +74,7 @@ public abstract class Tree {
     Color color = Color.RED;
 
     Node(String key, Node parent) {
+      modificationCount += 5;
       this.key = key;
       this.parent = parent;
     }
@@ -81,7 +90,10 @@ public abstract class Tree {
   public abstract void insert(String element);
 
   void insert(Node node, Node parent) {
+    comparisonCount += 2;
+    modificationCount++;
     if (parent == null) {
+      comparisonCount--;
       root = node;
     } else if (c.compare(node.key, parent.key) < 0) {
       parent.left = node;
@@ -124,18 +136,24 @@ public abstract class Tree {
   }
 
   Node find(String element) {
+    modificationCount++;
     Node node = root;
     while (node != getSentinel()) {
+      comparisonCount += 2;
       if (c.compare(node.key, element) == 0) {
         return node;
       }
+      comparisonCount++;
+      modificationCount++;
       node = ((c.compare(element, node.key) < 0) ? node.left : node.right);
     }
+    comparisonCount++;
     return getSentinel();
   }
 
   public boolean empty() {
     emptyCount++;
+    comparisonCount++;
     return root == getSentinel();
   }
 
@@ -147,7 +165,7 @@ public abstract class Tree {
       String line = reader.readLine();
       while (line != null) {
         //        list.addAll(Arrays.asList(line.split("[ \t,.;:?!\\-()\"]")));
-        for (String word : line.split("\\W+")) { // "[ \t,.;:?!\\-()\"]")) {
+        for (String word : line.split("[^\\w']+")) {
           insert(word);
         }
         line = reader.readLine();
@@ -157,7 +175,7 @@ public abstract class Tree {
 
       //      System.out.println(System.currentTimeMillis() - startTime + "[ms]");
     } catch (FileNotFoundException ex) {
-      System.err.println("File not found");
+      System.err.print("File not found");
     } catch (IOException ex) {
       ex.printStackTrace();
     }
@@ -165,35 +183,46 @@ public abstract class Tree {
 
   public void inorder() {
     inorderCount++;
+    modificationCount++;
     Node node = findMin(root);
-    int i = 0;
     while (node != getSentinel()) {
-      i++;
+      comparisonCount++;
+      modificationCount++;
       System.out.print(node.key + " ");
       node = findSuccessor(node);
     }
-    System.out.println(i);
+    comparisonCount++;
+    System.out.println();
   }
 
   private Node findMin(Node node) {
+    comparisonCount++;
     if (node == getSentinel()) {
       return getSentinel();
     }
     while (node.left != getSentinel()) {
+      comparisonCount++;
+      modificationCount++;
       node = node.left;
     }
+    comparisonCount++;
     return node;
   }
 
   Node findSuccessor(Node node) {
+    comparisonCount++;
     if (node.right != getSentinel()) {
       return findMin(node.right);
     }
+    modificationCount++;
     Node parent = node.parent;
     while (parent != getSentinel() && node == parent.right) {
+      comparisonCount += 2;
+      modificationCount += 2;
       node = parent;
       parent = node.parent;
     }
+    comparisonCount += 2;
     return parent;
   }
 }

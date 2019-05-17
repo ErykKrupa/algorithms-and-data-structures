@@ -1,10 +1,11 @@
 package main;
 
+import tree.Tree;
 import tree.BinarySearchTree;
 import tree.RedBlackTree;
 import tree.SplayTree;
-import tree.Tree;
 
+import java.util.LinkedList;
 import java.util.Scanner;
 
 public class Main {
@@ -31,7 +32,6 @@ public class Main {
   }
 
   public static void main(String[] args) {
-    long startTime = System.currentTimeMillis();
     if (args.length != 2) {
       System.err.println("Two argument required");
       return;
@@ -50,6 +50,7 @@ public class Main {
     } else {
       tree = new SplayTree(String::compareToIgnoreCase);
     }
+    LinkedList<String> tasks = new LinkedList<>();
 
     System.out.print("Amount of operations: ");
     operations = inputPositiveInteger();
@@ -58,10 +59,8 @@ public class Main {
       if (operation.length == 1) {
         switch (operation[0]) {
           case "empty":
-            System.out.println(tree.empty());
-            break;
           case "inorder":
-            tree.inorder();
+            tasks.add(operation[0]);
             break;
           default:
             onceAgain();
@@ -70,16 +69,11 @@ public class Main {
       } else if (operation.length == 2) {
         switch (operation[0]) {
           case "insert":
-            tree.insert(operation[1]);
-            break;
           case "delete":
-            tree.delete(operation[1]);
-            break;
           case "search":
-            System.out.println(tree.search(operation[1]));
-            break;
           case "load":
-            tree.load(operation[1]);
+            tasks.add(operation[0]);
+            tasks.add(operation[1]);
             break;
           default:
             onceAgain();
@@ -89,14 +83,46 @@ public class Main {
         onceAgain();
       }
     }
-    System.err.println("Time: " + ((System.currentTimeMillis() - startTime) / 1000) + "[s]");
+    long startTime = System.currentTimeMillis();
+    int i = 0;
+    while (!tasks.isEmpty()) {
+      String task = tasks.remove();
+      System.out.print(++i + ". " + task);
+      if (task.equals("empty")) {
+        System.out.println("(): " + tree.empty());
+      } else if (task.equals("inorder")) {
+        System.out.print("(): ");
+        tree.inorder();
+      } else {
+        String word = tasks.remove();
+        System.out.print("(" + word + ") ");
+        switch (task) {
+          case "insert":
+            tree.insert(word);
+            break;
+          case "delete":
+            tree.delete(word);
+            break;
+          case "search":
+            System.out.print(": " + tree.search(word));
+            break;
+          case "load":
+            tree.load(word);
+            break;
+        }
+        System.out.println();
+      }
+    }
+    System.err.println("Time: " + (System.currentTimeMillis() - startTime) + "[ms]");
     System.err.println("Insert: " + tree.getInsertCount());
     System.err.println("Delete: " + tree.getDeleteCount());
     System.err.println("Search: " + tree.getSearchCount());
     System.err.println("Empty: " + tree.getEmptyCount());
     System.err.println("Load: " + tree.getLoadCount());
     System.err.println("Inorder: " + tree.getInorderCount());
-    System.err.println("Final size: " + tree.getElementsCount());
     System.err.println("Maximal size: " + tree.getElementsCountMax());
+    System.err.println("Final size: " + tree.getElementsCount());
+    System.err.println("Comparisons: " + tree.getComparisonCount());
+    System.err.println("Modifications: " + tree.getModificationCount());
   }
 }
