@@ -9,16 +9,8 @@ import java.util.*;
 public abstract class Tree {
   Node root;
   Comparator<String> c;
-  private long insertCount;
-  private long deleteCount;
-  private long searchCount;
-  private long emptyCount;
-  private long loadCount;
-  private long inorderCount;
-  long elementsCount;
-  long elementsCountMax;
-  long comparisonCount;
-  long modificationCount;
+  private long insertCount, deleteCount, searchCount, emptyCount, loadCount, inorderCount;
+  public long elementsCount, elementsCountMax, comparisonCount, modificationCount;
 
   abstract Node getSentinel();
 
@@ -74,7 +66,6 @@ public abstract class Tree {
     Color color = Color.RED;
 
     Node(String key, Node parent) {
-      modificationCount += 5;
       this.key = key;
       this.parent = parent;
     }
@@ -90,8 +81,7 @@ public abstract class Tree {
   public abstract void insert(String element);
 
   void insert(Node node, Node parent) {
-    comparisonCount += 2;
-    modificationCount++;
+    comparisonCount++;
     if (parent == null) {
       comparisonCount--;
       root = node;
@@ -136,24 +126,20 @@ public abstract class Tree {
   }
 
   Node find(String element) {
-    modificationCount++;
     Node node = root;
     while (node != getSentinel()) {
-      comparisonCount += 2;
+      comparisonCount++;
       if (c.compare(node.key, element) == 0) {
         return node;
       }
       comparisonCount++;
-      modificationCount++;
       node = ((c.compare(element, node.key) < 0) ? node.left : node.right);
     }
-    comparisonCount++;
     return getSentinel();
   }
 
   public boolean empty() {
     emptyCount++;
-    comparisonCount++;
     return root == getSentinel();
   }
 
@@ -183,46 +169,35 @@ public abstract class Tree {
 
   public void inorder() {
     inorderCount++;
-    modificationCount++;
     Node node = findMin(root);
     while (node != getSentinel()) {
-      comparisonCount++;
-      modificationCount++;
       System.out.print(node.key + " ");
       node = findSuccessor(node);
     }
-    comparisonCount++;
     System.out.println();
   }
 
   private Node findMin(Node node) {
-    comparisonCount++;
     if (node == getSentinel()) {
       return getSentinel();
     }
     while (node.left != getSentinel()) {
-      comparisonCount++;
-      modificationCount++;
       node = node.left;
     }
-    comparisonCount++;
     return node;
   }
 
   Node findSuccessor(Node node) {
-    comparisonCount++;
     if (node.right != getSentinel()) {
       return findMin(node.right);
     }
-    modificationCount++;
     Node parent = node.parent;
     while (parent != getSentinel() && node == parent.right) {
-      comparisonCount += 2;
-      modificationCount += 2;
+      comparisonCount++;
       node = parent;
       parent = node.parent;
     }
-    comparisonCount += 2;
+    comparisonCount++;
     return parent;
   }
 }

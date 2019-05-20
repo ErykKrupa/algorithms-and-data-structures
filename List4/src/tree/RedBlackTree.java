@@ -7,7 +7,6 @@ public class RedBlackTree extends Tree {
 
   public RedBlackTree(Comparator<String> comparator) {
     super(comparator);
-    modificationCount += 6;
     sentinel.left = sentinel;
     sentinel.right = sentinel;
     sentinel.parent = sentinel;
@@ -21,7 +20,6 @@ public class RedBlackTree extends Tree {
   }
 
   private void leftRotate(Node node) {
-    modificationCount += 5;
     Node nextNode = node.right;
     node.right = nextNode.left;
     nextNode.left.parent = node;
@@ -31,7 +29,6 @@ public class RedBlackTree extends Tree {
   }
 
   private void rightRotate(Node node) {
-    modificationCount += 5;
     Node nextNode = node.left;
     node.left = nextNode.right;
     nextNode.right.parent = node;
@@ -41,15 +38,15 @@ public class RedBlackTree extends Tree {
   }
 
   private void rotate(Node node, Node nextNode) {
-    modificationCount += 2;
+    modificationCount++;
     nextNode.parent = node.parent;
-    comparisonCount += 2;
     if (node.parent == sentinel) {
-      comparisonCount--;
       root = nextNode;
     } else if (node == node.parent.left) {
+      comparisonCount++;
       node.parent.left = nextNode;
     } else {
+      comparisonCount++;
       node.parent.right = nextNode;
     }
   }
@@ -60,24 +57,22 @@ public class RedBlackTree extends Tree {
     if (element.equals("")) {
       return;
     }
-    modificationCount += 2;
     Node parent = sentinel;
     Node node = root;
     while (node != sentinel) {
       parent = node;
+      comparisonCount++;
       node = ((c.compare(element, node.key) < 0) ? node.left : node.right);
-      comparisonCount += 2;
-      modificationCount += 2;
     }
-    comparisonCount += 3;
-    modificationCount += 2;
+    modificationCount++;
     Node newNode = new Node(element, parent);
     if (parent == sentinel) {
-      comparisonCount--;
       root = newNode;
     } else if (c.compare(newNode.key, parent.key) < 0) {
+      comparisonCount++;
       parent.left = newNode;
     } else {
+      comparisonCount++;
       parent.right = newNode;
     }
     insertFixUp(newNode);
@@ -89,7 +84,6 @@ public class RedBlackTree extends Tree {
     Node nextNode;
     while (node.parent != sentinel && node.parent.color == Color.RED) {
       comparisonCount += 3;
-      modificationCount += 2;
       if (node.parent == node.parent.parent.left) {
         nextNode = node.parent.parent.right;
         if (nextNode.color == Color.RED) {
@@ -97,11 +91,9 @@ public class RedBlackTree extends Tree {
         } else {
           comparisonCount++;
           if (node == node.parent.right) {
-            modificationCount++;
             node = node.parent;
             leftRotate(node);
           }
-          modificationCount++;
           node.parent.color = Color.BLACK;
           node.parent.parent.color = Color.RED;
           rightRotate(node.parent.parent);
@@ -113,23 +105,20 @@ public class RedBlackTree extends Tree {
         } else {
           comparisonCount++;
           if (node == node.parent.left) {
-            modificationCount++;
             node = node.parent;
             rightRotate(node);
           }
-          modificationCount++;
           node.parent.color = Color.BLACK;
           node.parent.parent.color = Color.RED;
           leftRotate(node.parent.parent);
         }
       }
     }
-    comparisonCount += 2;
+    comparisonCount++;
     root.color = Color.BLACK;
   }
 
   private Node setColors(Node node, Node nextNode) {
-    modificationCount += 4;
     node.parent.color = Color.BLACK;
     nextNode.color = Color.BLACK;
     node.parent.parent.color = Color.RED;
@@ -139,21 +128,18 @@ public class RedBlackTree extends Tree {
 
   @Override
   public void delete(String element) {
-    modificationCount++;
     Node newNode = prepareToDelete(element);
-    comparisonCount++;
     if (newNode == getSentinel()) {
       return;
     }
-    comparisonCount += 3;
-    modificationCount += 2;
+    modificationCount++;
     Node node =
         (newNode.left == sentinel || newNode.right == sentinel) ? newNode : findSuccessor(newNode);
     Node nextNode = node.left != sentinel ? node.left : node.right;
     rotate(node, nextNode);
     comparisonCount += 2;
     if (node != newNode) {
-      modificationCount += 6;
+      modificationCount++;
       node.left = newNode.left;
       node.right = newNode.right;
       node.parent = newNode.parent;
@@ -178,31 +164,27 @@ public class RedBlackTree extends Tree {
   private void deleteFixUp(Node node) {
     Node nextNode;
     while (node != root && node.color == Color.BLACK) {
+      modificationCount++;
       comparisonCount += 6;
       if (node == node.parent.left) {
-        modificationCount++;
         nextNode = node.parent.right;
         if (nextNode.color == Color.RED) {
-          modificationCount += 3;
           nextNode.color = Color.BLACK;
           node.parent.color = Color.RED;
           leftRotate(node.parent);
           nextNode = node.parent.right;
         }
         if (nextNode.left.color == Color.BLACK && nextNode.right.color == Color.BLACK) {
-          modificationCount += 2;
           nextNode.color = Color.RED;
           node = node.parent;
         } else {
           comparisonCount++;
           if (nextNode.right.color == Color.BLACK) {
-            modificationCount += 3;
             nextNode.left.color = Color.BLACK;
             nextNode.color = Color.RED;
             rightRotate(nextNode);
             nextNode = node.parent.right;
           }
-          modificationCount += 4;
           nextNode.color = node.parent.color;
           node.parent.color = Color.BLACK;
           nextNode.right.color = Color.BLACK;
@@ -210,29 +192,24 @@ public class RedBlackTree extends Tree {
           node = root;
         }
       } else {
-        modificationCount++;
         nextNode = node.parent.left;
         if (nextNode.color == Color.RED) {
-          modificationCount += 3;
           nextNode.color = Color.BLACK;
           node.parent.color = Color.RED;
           rightRotate(node.parent);
           nextNode = node.parent.left;
         }
         if (nextNode.right.color == Color.BLACK && nextNode.left.color == Color.BLACK) {
-          modificationCount += 2;
           nextNode.color = Color.RED;
           node = node.parent;
         } else {
           comparisonCount++;
           if (nextNode.left.color == Color.BLACK) {
-            modificationCount += 3;
             nextNode.right.color = Color.BLACK;
             nextNode.color = Color.RED;
             leftRotate(nextNode);
             nextNode = node.parent.left;
           }
-          modificationCount += 4;
           nextNode.color = node.parent.color;
           node.parent.color = Color.BLACK;
           nextNode.left.color = Color.BLACK;
@@ -241,8 +218,7 @@ public class RedBlackTree extends Tree {
         }
       }
     }
-    comparisonCount++;
-    modificationCount++;
+    comparisonCount += 2;
     node.color = Color.BLACK;
   }
 }
