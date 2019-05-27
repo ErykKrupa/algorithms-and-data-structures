@@ -10,7 +10,7 @@ public abstract class Tree {
   Node root;
   Comparator<String> c;
   private long insertCount, deleteCount, searchCount, emptyCount, loadCount, inorderCount;
-  public long elementsCount, elementsCountMax, comparisonCount, modificationCount;
+  long elementsCount, elementsCountMax, comparisonCount, modificationCount;
 
   abstract Node getSentinel();
 
