@@ -11,6 +11,7 @@ public class Main {
       System.out.print(graph.edmondsKarp() + " : ");
       System.out.print(graph.getAugmentingPaths() + " : ");
       System.out.println(System.currentTimeMillis() - time + " [ms]");
+//      System.out.println(graph);
     }
   }
 }
