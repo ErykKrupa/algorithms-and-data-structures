@@ -2,7 +2,7 @@ package main;
 
 import graph.Graph;
 
-public class Main {
+public class GraphMain {
   public static void main(String[] args) {
     int size;
     if (args.length == 2 && (args[0].equals("--size") || args[0].equals("-s"))) {
@@ -17,9 +17,9 @@ public class Main {
       return;
     }
     Graph graph = new Graph(size);
-    System.out.print(size + " : ");
-    System.out.print(graph.edmondsKarp() + " : ");
-    System.out.print(graph.getAugmentingPaths() + " : ");
-    System.out.println(graph.getTime() + " [ms]");
+    System.out.println("Size: " + size);
+    System.out.println("Max Flow: " + graph.edmondsKarp());
+    System.err.println("Time: " + graph.getTime() + " [ms]");
+    System.err.println("Augmenting Paths: " + graph.getAugmentingPaths());
   }
 }

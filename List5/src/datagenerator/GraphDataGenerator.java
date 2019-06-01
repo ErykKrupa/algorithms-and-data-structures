@@ -1,4 +1,4 @@
-package main;
+package datagenerator;
 
 import graph.Graph;
 
@@ -6,7 +6,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class DataGenerator {
+public class GraphDataGenerator {
   private static final int TESTS = 100;
 
   public static void main(String[] args) {
@@ -22,7 +22,7 @@ public class DataGenerator {
       }
       System.out.println(i + 1 + "/" + TESTS);
     }
-    try (BufferedWriter writer = new BufferedWriter(new FileWriter("results.csv"))) {
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter("graph-results.csv"))) {
       for (int i = 0; i < 3; i++) {
         for (int j = 1; j <= 16; j++) {
           writer.write(j + ";");
