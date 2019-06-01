@@ -7,6 +7,7 @@ public class Graph {
   private int length;
   private int[][] capacities;
   private int augmentingPaths;
+  private long time;
 
   public Graph(int size) {
     if (size < 1 || size > 16) {
@@ -39,6 +40,7 @@ public class Graph {
   }
 
   public int edmondsKarp() {
+    long startTime = System.currentTimeMillis();
     augmentingPaths = 0;
     int maxFlow = 0;
     int[][] residualCapacities = new int[length][size];
@@ -87,12 +89,17 @@ public class Graph {
           }
         }
       }
+      time = System.currentTimeMillis() - startTime;
       return maxFlow;
     }
   }
 
   public int getAugmentingPaths() {
     return augmentingPaths;
+  }
+
+  public long getTime() {
+    return time;
   }
 
   @Override
