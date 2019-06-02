@@ -1,5 +1,8 @@
 package graph;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 
 public class BipartiteGraph {
@@ -103,13 +106,34 @@ public class BipartiteGraph {
           }
         }
       }
-      time = (System.nanoTime() - startTime) / 1000;
+      time = System.nanoTime() - startTime;
       return maximalMatching;
     }
   }
 
   public long getTime() {
     return time;
+  }
+
+  public void glpk(String file) {
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter("w64\\" + file + ".mod"))) {
+      writer.write(Graph.glpkContextFile + "printf \"Maximal matching is %g\\n\\n\", flow;\n" + "\n" + "data;\n" + "\n"
+              + "param n := " + (2 * length + 2) + ";\n" + "\n" + "param : E :   a :=");
+      for (int i = 2; i <= length + 1; i++) {
+        writer.write("\n\t" + 1 + "\t" + i + "\t\t" + 1);
+      }
+      for (int i = 2; i <= length + 1; i++) {
+        for (int j = 0; j < degree; j++) {
+          writer.write("\n\t" + i + "\t" + (vertices1[i - 2][j] + length + 2) + "\t\t" + 1);
+        }
+      }
+      for (int i = length + 2; i <= 2 * length + 1; i++) {
+        writer.write("\n\t" + i + "\t" + (2 * length + 2) + "\t\t" + 1);
+      }
+      writer.write(";\n\n" + "end;\n");
+    } catch (IOException ex) {
+      ex.printStackTrace();
+    }
   }
 
   @Override

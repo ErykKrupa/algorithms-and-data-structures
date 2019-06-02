@@ -37,8 +37,8 @@ public class GraphMain {
     }
     Graph graph = new Graph(size);
     System.out.println("Size: " + size);
-    System.out.println("Max Flow: " + graph.edmondsKarp());
-    System.err.println("Time: " + graph.getTime() + " [ms]");
+    System.out.println("Maximum Flow: " + graph.edmondsKarp());
+    System.err.println("Time: " + graph.getTime() / 1000_000.0 + " [ms]");
     System.err.println("Augmenting Paths: " + graph.getAugmentingPaths());
     if (glpk) {
       graph.glpk(file);

@@ -44,7 +44,7 @@ public class GraphDataGenerator {
         }
         writer.write(";");
         for (int j = 0; j < 16; j++) {
-          writer.write(times[j][i] + ";");
+          writer.write(times[j][i] / 1_000_000.0 + ";");
         }
         writer.newLine();
       }

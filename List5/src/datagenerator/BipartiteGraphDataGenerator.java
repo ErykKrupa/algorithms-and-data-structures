@@ -34,21 +34,21 @@ public class BipartiteGraphDataGenerator {
       writer.newLine();
       writer.newLine();
       writer.write("Size:;;Maximal Matching:");
-      write(writer, maximalMatching);
+      write(writer, maximalMatching, 1.0);
       writer.newLine();
       writer.write(";;Times:");
-      write(writer, times);
+      write(writer, times, 1_000_000.0);
     } catch (IOException ex) {
       ex.printStackTrace();
     }
   }
 
-  private static void write(BufferedWriter writer, long[][] array) throws IOException {
+  private static void write(BufferedWriter writer, long[][] array, double divisor) throws IOException {
     writer.newLine();
     for (int i = 0; i < 8; i++) {
       writer.write(i + 3 + ";;");
       for (int j = 0; j < i + 3; j++) {
-        writer.write(array[i][j] * 1.0 / TESTS + ";");
+        writer.write((array[i][j] / divisor) / TESTS + ";");
       }
       writer.newLine();
     }
