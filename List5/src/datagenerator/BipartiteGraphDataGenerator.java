@@ -43,7 +43,8 @@ public class BipartiteGraphDataGenerator {
     }
   }
 
-  private static void write(BufferedWriter writer, long[][] array, double divisor) throws IOException {
+  private static void write(BufferedWriter writer, long[][] array, double divisor)
+      throws IOException {
     writer.newLine();
     for (int i = 0; i < 8; i++) {
       writer.write(i + 3 + ";;");

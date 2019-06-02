@@ -40,7 +40,7 @@ public class BipartiteGraphMain {
           size = Integer.parseInt(args[1]);
         } else if (args[2].equals("--size") || args[2].equals("-s")) {
           size = Integer.parseInt(args[3]);
-        }  else if (args[4].equals("--size") || args[4].equals("-s")) {
+        } else if (args[4].equals("--size") || args[4].equals("-s")) {
           size = Integer.parseInt(args[5]);
         } else {
           error();
@@ -49,7 +49,7 @@ public class BipartiteGraphMain {
           degree = Integer.parseInt(args[1]);
         } else if (args[2].equals("--degree") || args[2].equals("-d")) {
           degree = Integer.parseInt(args[3]);
-        }  else if (args[4].equals("--degree") || args[4].equals("-d")) {
+        } else if (args[4].equals("--degree") || args[4].equals("-d")) {
           degree = Integer.parseInt(args[5]);
         } else {
           error();
@@ -58,7 +58,7 @@ public class BipartiteGraphMain {
           file = args[1];
         } else if (args[2].equals("--glpk") || args[2].equals("-g")) {
           file = args[3];
-        }  else if (args[4].equals("--glpk") || args[4].equals("-g")) {
+        } else if (args[4].equals("--glpk") || args[4].equals("-g")) {
           file = args[5];
         } else {
           error();
@@ -66,7 +66,7 @@ public class BipartiteGraphMain {
       } catch (NumberFormatException ex) {
         error();
       }
-    }else {
+    } else {
       error();
     }
 

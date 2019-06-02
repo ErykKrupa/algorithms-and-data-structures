@@ -6,25 +6,9 @@ import java.io.IOException;
 import java.util.*;
 
 public class BipartiteGraph {
-  private int degree;
   private int length;
-  private int[][] vertices1;
-  private int[][] vertices2;
+  private ArrayList<ArrayList<Integer>> graph = new ArrayList<>();
   private long time;
-
-  private ArrayList<Integer> list;
-  private int number;
-  private int index = -1;
-
-  private int getNextVertex() {
-    number++;
-    if (number >= length) {
-      number = 0;
-      Collections.shuffle(list);
-      index++;
-    }
-    return list.get(number);
-  }
 
   public BipartiteGraph(int size, int degree) {
     if (size < 1 || size > 16) {
@@ -33,49 +17,50 @@ public class BipartiteGraph {
     if (degree < 1 || degree > size) {
       throw new IllegalArgumentException("Degree must be greater than 0 and less than size.");
     }
-    this.degree = degree;
     this.length = 1 << size;
-    this.number = length;
-    vertices1 = new int[length][degree];
-    vertices2 = new int[length][degree];
-    list = new ArrayList<>(length);
-    for (int i = 0; i < length; i++) {
-      list.add(i);
+    for (int i = 0; i < 2 * length + 2; i++) {
+      graph.add(new ArrayList<>());
     }
-    for (int i = 0; i < length; i++) {
+    for (int i = 1; i <= length; i++) {
+      graph.get(0).add(i);
+      graph.get(i).add(0);
+    }
+    Random random = new Random();
+    for (int i = 1; i <= length; i++) {
+      Set<Integer> set = new HashSet<>();
       for (int j = 0; j < degree; j++) {
-        int vertex = getNextVertex();
-        vertices1[i][j] = vertex;
-        vertices2[vertex][index] = i;
+        Integer vertex;
+        do {
+          vertex = random.nextInt(length) + length + 1;
+        } while (set.contains(vertex));
+        set.add(vertex);
+        graph.get(i).add(vertex);
+        graph.get(vertex).add(i);
       }
+    }
+    for (int i = length + 1; i <= 2 * length; i++) {
+      graph.get(i).add(2 * length + 1);
+      graph.get(2 * length + 1).add(i);
     }
   }
 
   public int maxMatching() {
     long startTime = System.nanoTime();
     int maximalMatching = 0;
-    ArrayList<ArrayList<Integer>> vertices = new ArrayList<>(2 * length + 2);
-    ArrayList<HashSet<Integer>> residualCapacities = new ArrayList<>(2 * length + 2);
+    ArrayList<HashSet<Integer>> residualNetwork = new ArrayList<>(2 * length + 2);
     for (int i = 0; i < 2 * length + 2; i++) {
-      vertices.add(new ArrayList<>());
-      residualCapacities.add(new HashSet<>());
+      residualNetwork.add(new HashSet<>());
     }
     for (int i = 1; i <= length; i++) {
-      for (int j = 0; j < degree; j++) {
-        vertices.get(i).add(vertices1[i - 1][j] + length + 1);
-        residualCapacities.get(i).add(vertices1[i - 1][j] + length + 1);
+      residualNetwork.get(0).add(i);
+    }
+    for (int i = 1; i <= length; i++) {
+      for (int j = 1; j < graph.get(i).size(); j++) {
+        residualNetwork.get(i).add(graph.get(i).get(j));
       }
-      vertices.get(0).add(i);
-      residualCapacities.get(0).add(i);
-      vertices.get(i).add(0);
     }
     for (int i = length + 1; i <= 2 * length; i++) {
-      for (int j = 0; j < degree; j++) {
-        vertices.get(i).add(vertices2[i - length - 1][j] + 1);
-      }
-      vertices.get(i).add(2 * length + 1);
-      residualCapacities.get(i).add(2 * length + 1);
-      vertices.get(2 * length + 1).add(i);
+      residualNetwork.get(i).add(2 * length + 1);
     }
     int source = 0;
     int sink = 2 * length + 1;
@@ -91,15 +76,15 @@ public class BipartiteGraph {
         if (vertex == sink) {
           while (vertex != source) {
             Integer nextVertex = parent[vertex];
-            residualCapacities.get(nextVertex).remove(vertex);
-            residualCapacities.get(vertex).add(nextVertex);
+            residualNetwork.get(nextVertex).remove(vertex);
+            residualNetwork.get(vertex).add(nextVertex);
             vertex = nextVertex;
           }
           maximalMatching++;
           continue loop;
         }
-        for (Integer nextVertex : vertices.get(vertex)) {
-          if (!visited[nextVertex] && residualCapacities.get(vertex).contains(nextVertex)) {
+        for (Integer nextVertex : graph.get(vertex)) {
+          if (!visited[nextVertex] && residualNetwork.get(vertex).contains(nextVertex)) {
             visited[nextVertex] = true;
             parent[nextVertex] = vertex;
             queue.add(nextVertex);
@@ -117,14 +102,23 @@ public class BipartiteGraph {
 
   public void glpk(String file) {
     try (BufferedWriter writer = new BufferedWriter(new FileWriter("w64\\" + file + ".mod"))) {
-      writer.write(Graph.glpkContextFile + "printf \"Maximal matching is %g\\n\\n\", flow;\n" + "\n" + "data;\n" + "\n"
-              + "param n := " + (2 * length + 2) + ";\n" + "\n" + "param : E :   a :=");
+      writer.write(
+          Graph.glpkContextFile
+              + "printf \"Maximal matching is %g\\n\\n\", flow;\n"
+              + "\n"
+              + "data;\n"
+              + "\n"
+              + "param n := "
+              + (2 * length + 2)
+              + ";\n"
+              + "\n"
+              + "param : E :   a :=");
       for (int i = 2; i <= length + 1; i++) {
         writer.write("\n\t" + 1 + "\t" + i + "\t\t" + 1);
       }
-      for (int i = 2; i <= length + 1; i++) {
-        for (int j = 0; j < degree; j++) {
-          writer.write("\n\t" + i + "\t" + (vertices1[i - 2][j] + length + 2) + "\t\t" + 1);
+      for (int i = 1; i <= length; i++) {
+        for (int j = 1; j < graph.get(i).size(); j++) {
+          writer.write("\n\t" + (i + 1) + "\t" + (graph.get(i).get(j) + 1) + "\t\t" + 1);
         }
       }
       for (int i = length + 2; i <= 2 * length + 1; i++) {
@@ -138,14 +132,11 @@ public class BipartiteGraph {
 
   @Override
   public String toString() {
-    return toString(vertices1) + System.lineSeparator() + toString(vertices2);
-  }
-
-  private String toString(int[][] vertices) {
     StringBuilder stringBuilder = new StringBuilder();
-    for (int i = 0; i < length; i++) {
-      for (int j = 0; j < degree; j++) {
-        stringBuilder.append("[").append(vertices[i][j]).append("]");
+    for (int i = 0; i < 2 * length + 2; i++) {
+      stringBuilder.append(i).append("\t->\t");
+      for (int j = 0; j < graph.get(i).size(); j++) {
+        stringBuilder.append(graph.get(i).get(j)).append("\t");
       }
       stringBuilder.append(System.lineSeparator());
     }

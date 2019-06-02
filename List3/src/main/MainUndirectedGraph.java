@@ -18,10 +18,10 @@ public class MainUndirectedGraph extends Main {
     UndirectedGraph<Integer> graph = new UndirectedGraph<>();
     inputGraph(graph);
 
-    if (algorithm.equals("-k")) {
+//    if (algorithm.equals("-k")) {
       graph.kruskal();
-    } else {
+//    } else {
       graph.prim();
-    }
+//    }
   }
 }

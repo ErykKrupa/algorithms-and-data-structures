@@ -107,8 +107,17 @@ public class Graph {
 
   public void glpk(String file) {
     try (BufferedWriter writer = new BufferedWriter(new FileWriter("w64\\" + file + ".mod"))) {
-      writer.write(glpkContextFile + "printf \"Maximum flow is %g\\n\\n\", flow;\n" + "\n" + "data;\n" + "\n"
-              + "param n := " + length + ";\n" + "\n" + "param : E :   a :=");
+      writer.write(
+          glpkContextFile
+              + "printf \"Maximum flow is %g\\n\\n\", flow;\n"
+              + "\n"
+              + "data;\n"
+              + "\n"
+              + "param n := "
+              + length
+              + ";\n"
+              + "\n"
+              + "param : E :   a :=");
       for (int i = 0; i < length; i++) {
         for (int j = 0; j < size; j++) {
           if (capacities[i][j] != 0) {
