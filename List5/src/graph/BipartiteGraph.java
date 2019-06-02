@@ -48,7 +48,7 @@ public class BipartiteGraph {
     }
   }
 
-  public int algorithm() {
+  public int maxMatching() {
     long startTime = System.nanoTime();
     int maximalMatching = 0;
     ArrayList<ArrayList<Integer>> vertices = new ArrayList<>(2 * length + 2);
@@ -95,7 +95,6 @@ public class BipartiteGraph {
           maximalMatching++;
           continue loop;
         }
-
         for (Integer nextVertex : vertices.get(vertex)) {
           if (!visited[nextVertex] && residualCapacities.get(vertex).contains(nextVertex)) {
             visited[nextVertex] = true;
@@ -107,14 +106,6 @@ public class BipartiteGraph {
       time = (System.nanoTime() - startTime) / 1000;
       return maximalMatching;
     }
-    //
-    //        for (int i = 0; i < vertices.size(); i++) {
-    //          for (int j = 0; j < vertices.get(i).size(); j++) {
-    //            System.out.print("[" + vertices.get(i).get(j) + "]");
-    //          }
-    //          System.out.println();
-    //        }
-
   }
 
   public long getTime() {

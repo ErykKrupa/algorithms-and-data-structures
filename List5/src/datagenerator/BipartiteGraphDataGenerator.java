@@ -20,7 +20,7 @@ public class BipartiteGraphDataGenerator {
       for (int j = 0; j < i + 3; j++) {
         for (int k = 0; k < TESTS; k++) {
           BipartiteGraph graph = new BipartiteGraph(i + 3, j + 1);
-          maximalMatching[i][j] += graph.algorithm();
+          maximalMatching[i][j] += graph.maxMatching();
           times[i][j] += graph.getTime();
         }
       }

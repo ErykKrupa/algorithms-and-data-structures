@@ -1,6 +1,8 @@
 *.idea/
+*w64/
 *.iml
 *.csv
 *.xlsx
 *.txt
+*.mod
 out/

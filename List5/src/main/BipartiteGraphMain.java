@@ -38,7 +38,7 @@ public class BipartiteGraphMain {
     BipartiteGraph graph = new BipartiteGraph(size, degree);
     System.out.println("Size: " + size);
     System.out.println("Degree: " + degree);
-    System.out.println("Maximal Matching: " + graph.algorithm());
+    System.out.println("Maximal Matching: " + graph.maxMatching());
     System.err.println("Time: " + graph.getTime() + " [ms]");
     //    System.out.println(graph.toString());
   }

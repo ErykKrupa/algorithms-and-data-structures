@@ -1,5 +1,8 @@
 package graph;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 
 public class Graph {
@@ -100,6 +103,73 @@ public class Graph {
 
   public long getTime() {
     return time;
+  }
+
+  public void glpk(String file) {
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter("w64\\" + file + ".mod"))) {
+      writer.write(
+          "param n, integer, >= 2;\n"
+              + "/* number of nodes */\n"
+              + "\n"
+              + "set V, default {1..n};\n"
+              + "/* set of nodes */\n"
+              + "\n"
+              + "set E, within V cross V;\n"
+              + "/* set of arcs */\n"
+              + "\n"
+              + "param a{(i,j) in E}, > 0;\n"
+              + "/* a[i,j] is capacity of arc (i,j) */\n"
+              + "\n"
+              + "param s, symbolic, in V, default 1;\n"
+              + "/* source node */\n"
+              + "\n"
+              + "param t, symbolic, in V, != s, default n;\n"
+              + "/* sink node */\n"
+              + "\n"
+              + "var x{(i,j) in E}, >= 0, <= a[i,j];\n"
+              + "/* x[i,j] is elementary flow through arc (i,j) to be found */\n"
+              + "\n"
+              + "var flow, >= 0;\n"
+              + "/* total flow from s to t */\n"
+              + "\n"
+              + "s.t. node{i in V}:\n"
+              + "/* node[i] is conservation constraint for node i */\n"
+              + "\n"
+              + "   sum{(j,i) in E} x[j,i] + (if i = s then flow)\n"
+              + "   /* summary flow into node i through all ingoing arcs */\n"
+              + "\n"
+              + "   = /* must be equal to */\n"
+              + "\n"
+              + "   sum{(i,j) in E} x[i,j] + (if i = t then flow);\n"
+              + "   /* summary flow from node i through all outgoing arcs */\n"
+              + "\n"
+              + "maximize obj: flow;\n"
+              + "/* objective is to maximize the total flow through the network */\n"
+              + "\n"
+              + "solve;\n"
+              + "\n"
+              + "printf{1..56} \"=\"; printf \"\\n\";\n"
+              + "printf \"Maximum flow from node %s to node %s is %g\\n\\n\", s, t, flow;\n"
+              + "\n"
+              + "data;\n"
+              + "\n"
+              + "param n := "
+              + length
+              + ";\n"
+              + "\n"
+              + "param : E :   a :=");
+      for (int i = 0; i < length; i++) {
+        for (int j = 0; j < size; j++) {
+          if (capacities[i][j] != 0) {
+            writer.write(
+                "\n\t" + (i + 1) + "\t" + (i + (1 << j) + 1) + "\t\t" + capacities[i][j]);
+          }
+        }
+      }
+      writer.write(";\n\n" + "end;\n");
+    } catch (IOException ex) {
+      ex.printStackTrace();
+    }
   }
 
   @Override
